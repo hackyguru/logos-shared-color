@@ -1,4 +1,10 @@
+<div align="center">
+
+<img src="shared-color-ui/icons/shared_color.png" alt="Logos Shared Color logo" width="128" height="128">
+
 # Logos Shared Color
+
+</div>
 
 Pick a colour from a palette and every peer's background changes to match. The colour is synced peer-to-peer over Logos Messaging (`logos-delivery-module`). It's a small end-to-end example of the messaging pattern for [Logos Basecamp](https://logos.co), and a good template to copy.
 
