@@ -237,15 +237,19 @@ bool SharedColorPlugin::broadcastColor(const QString& hex, qint64 ts)
 
 void SharedColorPlugin::handleMessageReceived(const QVariantList& data)
 {
-    // delivery_module.messageReceived: [hash, contentTopic, payload_base64, ts_ns]
+    // delivery_module.messageReceived: [hash, contentTopic, payload, ts_ns]
+    // delivery_module >= 0.3 hands over the payload as sent; older releases
+    // Base64-encoded it. Try it as-is first, then fall back to Base64.
     if (data.size() < 3) return;
     if (data[1].toString() != TOPIC) return;
 
-    const QByteArray payload =
-        QByteArray::fromBase64(data[2].toString().toUtf8());
-
+    QByteArray payload = data[2].toString().toUtf8();
     QJsonParseError err{};
-    const QJsonDocument doc = QJsonDocument::fromJson(payload, &err);
+    QJsonDocument doc = QJsonDocument::fromJson(payload, &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        payload = QByteArray::fromBase64(payload);
+        doc = QJsonDocument::fromJson(payload, &err);
+    }
     if (err.error != QJsonParseError::NoError || !doc.isObject()) {
         qWarning() << "SharedColorPlugin: invalid JSON payload:" << payload;
         return;

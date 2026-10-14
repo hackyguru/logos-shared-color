@@ -1,6 +1,6 @@
 {
   "name": "shared_color",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "core",
   "category": "example",
   "description": "Shared background color synced across peers via logos-delivery",
